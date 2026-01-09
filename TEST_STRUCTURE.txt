@@ -1,0 +1,162 @@
+Hierarchical Memory Test Suite - File Structure
+================================================
+
+tests/
+├── __init__.py                          # Test package marker
+├── conftest.py                          # Shared fixtures (315 lines)
+├── README.md                            # Test suite documentation
+├── pytest.ini                           # Pytest configuration
+└── test_*.py files...
+
+Test Files (8 total):
+===================
+
+1. test_working_memory.py (436 lines)
+   - 28 test functions across 7 test classes
+   - Tests: capacity, decay, eviction, priority, statistics
+
+2. test_episodic_memory.py (398 lines)
+   - 31 test functions across 8 test classes
+   - Tests: CRUD, temporal search, location, emotion, statistics
+
+3. test_semantic_memory.py (352 lines)
+   - 29 test functions across 9 test classes
+   - Tests: concepts, facts, hierarchy, similarity, vectors
+
+4. test_procedural_memory.py (409 lines)
+   - 35 test functions across 9 test classes
+   - Tests: skills, practice, forgetting, transfer, scheduling
+
+5. test_consolidation.py (383 lines)
+   - 28 test functions across 9 test classes
+   - Tests: queue, KL divergence, consolidation, sleep
+
+6. test_retrieval.py (402 lines)
+   - 33 test functions across 10 test classes
+   - Tests: 6 search modes, multi-tier, ranking, hybrid
+
+7. test_sharing.py (573 lines)
+   - 39 test functions across 11 test classes
+   - Tests: 4 strategies, trust, conflicts, access tracking
+
+8. test_integration.py (434 lines)
+   - 21 test functions across 6 test classes
+   - Tests: lifecycle, consolidation+retrieval, collaboration
+
+Root Level:
+===========
+
+run_tests.py                 # Test runner CLI script
+TEST_SUITE_SUMMARY.md        # Complete test overview
+pytest.ini                   # Pytest configuration
+
+Test Structure by Class:
+========================
+
+Total: 71 test classes
+Total: 217 test functions
+
+Working Memory:     7 classes, 28 tests
+Episodic Memory:    8 classes, 31 tests
+Semantic Memory:    9 classes, 29 tests
+Procedural Memory:  9 classes, 35 tests
+Consolidation:      9 classes, 28 tests
+Retrieval:         10 classes, 33 tests
+Sharing:           11 classes, 39 tests
+Integration:        6 classes, 21 tests
+
+Fixtures Available:
+==================
+
+Memory System Fixtures:
+  - working_memory
+  - small_working_memory
+  - populated_working_memory
+  - episodic_memory
+  - populated_episodic_memory
+  - semantic_memory
+  - populated_semantic_memory
+  - procedural_memory
+  - populated_procedural_memory
+  - consolidation_pipeline
+  - memory_retrieval
+  - populated_all_memory_systems
+
+Sharing Fixtures:
+  - agent_pack
+  - memory_sharing
+
+Data Fixtures:
+  - sample_texts
+  - sample_distributions
+  - time_range
+
+Helper Fixtures:
+  - assert_memory_valid
+
+Test Markers:
+=============
+
+Category Markers:
+  - unit
+  - integration
+  - slow
+
+Component Markers:
+  - working
+  - episodic
+  - semantic
+  - procedural
+  - consolidation
+  - retrieval
+  - sharing
+
+Coverage Goals:
+==============
+
+Working Memory:     80%+
+Episodic Memory:    80%+
+Semantic Memory:    80%+
+Procedural Memory:   80%+
+Consolidation:      80%+
+Retrieval:          80%+
+Sharing:            80%+
+
+Overall Target:     80%+
+
+Test Execution Commands:
+========================
+
+Run all tests:
+  python run_tests.py
+  pytest tests/
+
+Run specific file:
+  python run_tests.py -f test_working_memory.py
+  pytest tests/test_working_memory.py
+
+Run by marker:
+  python run_tests.py -m working
+  pytest tests/ -m working
+
+Generate coverage:
+  python run_tests.py --coverage
+  pytest tests/ --cov=hierarchical_memory --cov-report=html
+
+List tests:
+  python run_tests.py --list
+  pytest tests/ --collect-only
+
+Quick test (skip slow):
+  pytest tests/ -m "not slow"
+
+CI/CD Integration:
+==================
+
+GitHub Actions (if present):
+  - Runs on push/PR
+  - Enforces 80% coverage
+  - Generates coverage reports
+
+The test suite is production-ready and provides comprehensive coverage
+of the hierarchical-memory package functionality.

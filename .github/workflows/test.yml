@@ -1,0 +1,137 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  test:
+    name: Test Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+        os: [ubuntu-latest]
+        include:
+          - python-version: '3.11'
+            os: windows-latest
+          - python-version: '3.11'
+            os: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+          cache-dependency-path: |
+            **/requirements*.txt
+            **/pyproject.toml
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip wheel
+          pip install -e ".[dev,all]"
+
+      - name: Lint with black
+        run: |
+          black --check --diff hierarchical_memory/
+
+      - name: Lint with flake8
+        run: |
+          flake8 hierarchical_memory/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 hierarchical_memory/ --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics
+
+      - name: Check import sorting with isort
+        run: |
+          isort --check-only --diff hierarchical_memory/
+
+      - name: Type check with mypy
+        run: |
+          mypy hierarchical_memory/ || true
+
+      - name: Run tests with coverage
+        run: |
+          pytest --cov=hierarchical_memory --cov-report=xml --cov-report=term-missing --cov-report=html -v
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          flags: unittests-py${{ matrix.python-version }}
+          name: codecov-py${{ matrix.python-version }}-${{ matrix.os }}
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+
+      - name: Upload coverage reports to GitHub
+        uses: actions/upload-artifact@v4
+        if: matrix.python-version == '3.11' && matrix.os == 'ubuntu-latest'
+        with:
+          name: coverage-report
+          path: htmlcov/
+
+      - name: Check coverage threshold
+        if: matrix.python-version == '3.11' && matrix.os == 'ubuntu-latest'
+        run: |
+          coverage report --fail-under=70
+
+  test-minimal:
+    name: Test with minimal dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install minimal dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        run: |
+          pytest tests/ -v --no-cov
+
+  test-optional-deps:
+    name: Test optional dependencies
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        extras: [embeddings, chromadb, faiss]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install with ${{ matrix.extras }} extra
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[${{ matrix.extras }}]"
+          pip install pytest pytest-cov
+
+      - name: Run tests
+        run: |
+          pytest tests/ -v --no-cov

@@ -1,0 +1,5 @@
+# Core dependencies for hierarchical-memory
+# These are the minimum required dependencies for basic functionality
+
+# Numerical computing
+numpy>=1.19.0,<2.0.0

@@ -1,0 +1,17 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include SECURITY.md
+include requirements.txt
+include requirements-dev.txt
+include pyproject.toml
+recursive-include hierarchical_memory *.py
+recursive-include hierarchical_memory *.typed
+recursive-include examples *.py
+recursive-include docs *.md *.rst
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .DS_Store
+global-exclude .git*
+global-exclude *.so
