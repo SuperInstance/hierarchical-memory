@@ -36,10 +36,10 @@ keywords = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/example/hierarchical-memory"
-Documentation = "https://github.com/example/hierarchical-memory#readme"
-Repository = "https://github.com/example/hierarchical-memory"
-Issues = "https://github.com/example/hierarchical-memory/issues"
+Homepage = "https://github.com/SuperInstance/hierarchical-memory"
+Documentation = "https://github.com/SuperInstance/hierarchical-memory#readme"
+Repository = "https://github.com/SuperInstance/hierarchical-memory"
+Issues = "https://github.com/SuperInstance/hierarchical-memory/issues"
 
 [project.optional-dependencies]
 # Vector database support
