@@ -2,6 +2,10 @@
 
 A comprehensive four-tier memory architecture for AI agents, inspired by human cognitive science.
 
+## 📚 Documentation
+
+Comprehensive documentation is available in [docs/COMPLETE_GUIDE.md](docs/COMPLETE_GUIDE.md).
+
 ## Overview
 
 The Hierarchical Memory System implements a sophisticated, biologically-inspired memory architecture for AI agents. It provides four distinct memory tiers, each serving a specific purpose in information processing and storage, similar to how human memory works.
